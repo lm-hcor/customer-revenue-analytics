@@ -92,6 +92,14 @@ def clean_products(products: pd.DataFrame) -> pd.DataFrame:
 
     products = products.drop_duplicates().reset_index(drop=True)
 
+    # Rename columns to match the database schema
+    products = products.rename(
+        columns={
+            "product_name_lenght": "product_name_length",
+            "product_description_lenght": "product_description_length",
+        }
+    )
+
     dataframe_summary(products, "Products")
 
     return products

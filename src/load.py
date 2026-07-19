@@ -7,69 +7,64 @@ Author: Luis Miguel Herrera
 Project: Customer Revenue Analytics
 """
 
-import os
-from pathlib import Path
-
-from dotenv import load_dotenv
-from sqlalchemy import create_engine
-from sqlalchemy.engine import Engine
+from database import get_engine
+from extract import load_datasets
+from transform import transform_datasets
 
 
 # =============================================================================
-# Load environment variables
+# Functions
 # =============================================================================
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
-ENV_PATH = PROJECT_ROOT / ".env"
-
-if not ENV_PATH.exists():
-    raise FileNotFoundError(f".env file not found: {ENV_PATH}")
-
-load_dotenv(dotenv_path=ENV_PATH, override=True)
-
-
-# =============================================================================
-# Database connection
-# =============================================================================
-
-def create_database_engine() -> Engine:
+def load_table(engine, table_name, dataframe):
     """
-    Create a SQLAlchemy engine for PostgreSQL.
+    Load a pandas DataFrame into PostgreSQL.
     """
 
-    host = os.getenv("DB_HOST")
-    port = os.getenv("DB_PORT")
-    database = os.getenv("DB_NAME")
-    user = os.getenv("DB_USER")
-    password = os.getenv("DB_PASSWORD")
+    print(f"\nLoading {table_name}...")
 
-    if not all([host, port, database, user, password]):
-        raise ValueError(
-            "One or more environment variables are missing. "
-            "Check your .env file."
-        )
-
-    connection_string = (
-        f"postgresql+psycopg2://"
-        f"{user}:{password}@{host}:{port}/{database}"
+    dataframe.to_sql(
+        name=table_name,
+        con=engine,
+        if_exists="append",
+        index=False,
     )
 
-    return create_engine(connection_string)
+    print(f"✓ {table_name} loaded ({len(dataframe):,} rows)")
 
 
 # =============================================================================
 # Main
 # =============================================================================
 
-def main() -> None:
-    """
-    Test the connection to PostgreSQL.
-    """
+def main():
 
-    engine = create_database_engine()
+    engine = get_engine()
 
-    with engine.connect():
-        print("Successfully connected to PostgreSQL.")
+    datasets = load_datasets()
+
+    transformed = transform_datasets(datasets)
+
+    load_order = [
+        "categories",
+        "products",
+        "customers",
+        "orders",
+        "payments",
+        "order_items",
+    ]
+
+    for table in load_order:
+
+        load_table(
+            engine,
+            table,
+            transformed[table],
+        )
+
+    print("\n" + "=" * 60)
+    print("ETL completed successfully.")
+    print("=" * 60)
 
 
 # =============================================================================

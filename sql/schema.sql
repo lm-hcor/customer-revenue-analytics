@@ -20,11 +20,11 @@ CREATE TABLE customers (
 
     customer_unique_id VARCHAR(50) NOT NULL,
 
-    zip_code_prefix INTEGER,
+    customer_zip_code_prefix INTEGER,
 
-    city VARCHAR(100),
+    customer_city VARCHAR(100),
 
-    state CHAR(2)
+    customer_state CHAR(2)
 
 );
 
@@ -34,9 +34,9 @@ CREATE TABLE customers (
 
 CREATE TABLE categories (
 
-    category_name VARCHAR(100) PRIMARY KEY,
+    product_category_name VARCHAR(100) PRIMARY KEY,
 
-    category_name_english VARCHAR(100)
+    product_category_name_english VARCHAR(100)
 
 );
 
@@ -48,29 +48,21 @@ CREATE TABLE products (
 
     product_id VARCHAR(50) PRIMARY KEY,
 
-    category_name VARCHAR(100),
+    product_category_name VARCHAR(100),
 
-    name_length INTEGER,
+    product_name_length INTEGER,
 
-    description_length INTEGER,
+    product_description_length INTEGER,
 
-    photos_qty INTEGER,
+    product_photos_qty INTEGER,
 
-    weight_g NUMERIC,
+    product_weight_g NUMERIC,
 
-    length_cm NUMERIC,
+    product_length_cm NUMERIC,
 
-    height_cm NUMERIC,
+    product_height_cm NUMERIC,
 
-    width_cm NUMERIC,
-
-    CONSTRAINT fk_products_category
-
-        FOREIGN KEY (category_name)
-
-        REFERENCES categories(category_name)
-
-);
+    product_width_cm NUMERIC);
 
 -- =====================================================
 -- Orders
@@ -82,17 +74,17 @@ CREATE TABLE orders (
 
     customer_id VARCHAR(50) NOT NULL,
 
-    status VARCHAR(30),
+    order_status VARCHAR(30),
 
-    purchase_timestamp TIMESTAMP,
+    order_purchase_timestamp TIMESTAMP,
 
-    approved_timestamp TIMESTAMP,
+    order_approved_at TIMESTAMP,
 
-    delivered_carrier_date TIMESTAMP,
+    order_delivered_carrier_date TIMESTAMP,
 
-    delivered_customer_date TIMESTAMP,
+    order_delivered_customer_date TIMESTAMP,
 
-    estimated_delivery_date TIMESTAMP,
+    order_estimated_delivery_date TIMESTAMP,
 
     CONSTRAINT fk_orders_customer
 
@@ -172,7 +164,7 @@ CREATE INDEX idx_orders_customer
 ON orders(customer_id);
 
 CREATE INDEX idx_orders_purchase
-ON orders(purchase_timestamp);
+ON orders(order_purchase_timestamp);
 
 CREATE INDEX idx_items_product
 ON order_items(product_id);
@@ -181,7 +173,7 @@ CREATE INDEX idx_items_order
 ON order_items(order_id);
 
 CREATE INDEX idx_products_category
-ON products(category_name);
+ON products(product_category_name);
 
 CREATE INDEX idx_payments_order
 ON payments(order_id);
