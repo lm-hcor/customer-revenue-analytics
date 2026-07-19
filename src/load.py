@@ -8,18 +8,33 @@ Project: Customer Revenue Analytics
 """
 
 import os
-
-from dotenv import load_dotenv
-from sqlalchemy import create_engine, Engine
 from pathlib import Path
 
-project_root = Path(__file__).resolve().parent.parent
-load_dotenv(project_root / ".env")
+from dotenv import load_dotenv
+from sqlalchemy import create_engine
+from sqlalchemy.engine import Engine
 
+
+# =============================================================================
+# Load environment variables
+# =============================================================================
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+ENV_PATH = PROJECT_ROOT / ".env"
+
+if not ENV_PATH.exists():
+    raise FileNotFoundError(f".env file not found: {ENV_PATH}")
+
+load_dotenv(dotenv_path=ENV_PATH, override=True)
+
+
+# =============================================================================
+# Database connection
+# =============================================================================
 
 def create_database_engine() -> Engine:
     """
-    Create a SQLAlchemy engine.
+    Create a SQLAlchemy engine for PostgreSQL.
     """
 
     host = os.getenv("DB_HOST")
@@ -28,18 +43,27 @@ def create_database_engine() -> Engine:
     user = os.getenv("DB_USER")
     password = os.getenv("DB_PASSWORD")
 
+    if not all([host, port, database, user, password]):
+        raise ValueError(
+            "One or more environment variables are missing. "
+            "Check your .env file."
+        )
+
     connection_string = (
-        f"postgresql+psycopg2://{user}:{password}@{host}:{port}/{database}"
+        f"postgresql+psycopg2://"
+        f"{user}:{password}@{host}:{port}/{database}"
     )
 
-    engine = create_engine(connection_string)
+    return create_engine(connection_string)
 
-    return engine
 
+# =============================================================================
+# Main
+# =============================================================================
 
 def main() -> None:
     """
-    Execute the loading process.
+    Test the connection to PostgreSQL.
     """
 
     engine = create_database_engine()
