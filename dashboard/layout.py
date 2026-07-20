@@ -91,16 +91,25 @@ payment_fig.update_layout(
 # Delivery performance
 # =============================================================================
 
-delivery_fig = px.pie(
-    delivery,
-    names="delivery_status",
-    values="total_orders",
-    title="Delivery Performance",
+delivery_counts = (
+    delivery["delivered_on_time"]
+    .value_counts()
+    .rename_axis("status")
+    .reset_index(name="orders")
 )
 
-delivery_fig.update_layout(
-    template="plotly_white",
-    margin=dict(l=20, r=20, t=60, b=20),
+delivery_counts["status"] = delivery_counts["status"].replace(
+    {
+        True: "On Time",
+        False: "Delayed",
+    }
+)
+
+delivery_fig = px.pie(
+    delivery_counts,
+    names="status",
+    values="orders",
+    title="Delivery Performance",
 )
 
 # =============================================================================
@@ -131,173 +140,75 @@ customer_fig.update_layout(
 # =============================================================================
 
 layout = html.Div(
-
     children=[
-
         # ---------------------------------------------------------
         # Header
         # ---------------------------------------------------------
-
         html.Div(
-
             children=[
-
-                html.H1(
-                    "Customer Revenue Analytics Dashboard"
-                ),
-
-                html.P(
-                    "Interactive dashboard built with Python, PostgreSQL and Dash."
-                )
-
+                html.H1("Customer Revenue Analytics Dashboard"),
+                html.P("Interactive dashboard built with Python, PostgreSQL and Dash."),
             ],
-
-            className="header"
-
+            className="header",
         ),
-
         html.Hr(),
-
         # ---------------------------------------------------------
         # KPI cards
         # ---------------------------------------------------------
-
         html.Div(
-
             children=[
-
                 html.Div(
-
                     children=[
-
                         html.H3("Revenue"),
-
-                        html.H2(f"${kpis['revenue']:,.0f}")
-
+                        html.H2(f"${kpis['total_revenue']:,.0f}"),
                     ],
-
-                    className="card"
-
+                    className="card",
                 ),
-
                 html.Div(
-
-                    children=[
-
-                        html.H3("Orders"),
-
-                        html.H2(f"{kpis['total_orders']:,}")
-
-                    ],
-
-                    className="card"
-
+                    children=[html.H3("Orders"), html.H2(f"{kpis['total_orders']:,}")],
+                    className="card",
                 ),
-
                 html.Div(
-
                     children=[
-
                         html.H3("Customers"),
-
-                        html.H2(f"{kpis['total_customers']:,}")
-
+                        html.H2(f"{kpis['total_customers']:,}"),
                     ],
-
-                    className="card"
-
+                    className="card",
                 ),
-
                 html.Div(
-
                     children=[
-
                         html.H3("Average Order"),
-
-                        html.H2(f"${kpis['average_order_value']:,.2f}")
-
+                        html.H2(f"${kpis['average_order_value']:,.2f}"),
                     ],
-
-                    className="card"
-
+                    className="card",
                 ),
-
             ],
-
-            className="kpi-container"
-
+            className="kpi-container",
         ),
-
         html.Br(),
-
         # ---------------------------------------------------------
         # Monthly revenue
         # ---------------------------------------------------------
-
-        dcc.Graph(
-            figure=monthly_fig
-        ),
-
+        dcc.Graph(figure=monthly_fig),
         # ---------------------------------------------------------
         # Second row
         # ---------------------------------------------------------
-
         html.Div(
-
             children=[
-
-                dcc.Graph(
-                    figure=category_fig,
-                    style={"width": "50%"}
-                ),
-
-                dcc.Graph(
-                    figure=payment_fig,
-                    style={"width": "50%"}
-                )
-
+                dcc.Graph(figure=category_fig, style={"width": "50%"}),
+                dcc.Graph(figure=payment_fig, style={"width": "50%"}),
             ],
-
-            style={
-
-                "display": "flex",
-
-                "gap": "20px"
-
-            }
-
+            style={"display": "flex", "gap": "20px"},
         ),
-
         # ---------------------------------------------------------
         # Third row
         # ---------------------------------------------------------
-
         html.Div(
-
             children=[
-
-                dcc.Graph(
-                    figure=delivery_fig,
-                    style={"width": "50%"}
-                ),
-
-                dcc.Graph(
-                    figure=customer_fig,
-                    style={"width": "50%"}
-                )
-
+                dcc.Graph(figure=delivery_fig, style={"width": "50%"}),
+                dcc.Graph(figure=customer_fig, style={"width": "50%"}),
             ],
-
-            style={
-
-                "display": "flex",
-
-                "gap": "20px"
-
-            }
-
-        )
-
+            style={"display": "flex", "gap": "20px"},
+        ),
     ]
-
 )
