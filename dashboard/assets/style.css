@@ -1,49 +1,182 @@
 body {
 
     font-family: Arial, Helvetica, sans-serif;
-    background: #f4f6f9;
-    margin: 40px;
+    background: #f8fafc;
+    margin: 30px;
 
 }
+
 
 h1 {
 
-    color: #1f2937;
+    color: #111827;
+    font-size: 36px;
+    margin-bottom: 8px;
 
 }
+
+
+.header p {
+
+    color: #6b7280;
+    font-size: 17px;
+
+}
+
+
+hr {
+
+    border: none;
+    border-top: 1px solid #e5e7eb;
+    margin: 25px 0;
+
+}
+
 
 .kpi-container {
 
     display: flex;
     gap: 20px;
     justify-content: space-between;
-    margin-top: 30px;
+    margin-top: 25px;
 
 }
+
 
 .card {
 
     background: white;
     flex: 1;
     padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+    border-radius: 16px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
     text-align: center;
 
 }
 
+
+.card:hover {
+
+    transform: translateY(-3px);
+    transition: 0.2s;
+
+}
+
+
 .card h3 {
 
+    color: #64748b;
+    font-size: 16px;
+    margin-bottom: 12px;
+    font-weight: 600;
+
+}
+
+body {
+
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f8fafc;
+    margin: 30px;
+
+}
+
+
+h1 {
+
+    color: #111827;
+    font-size: 36px;
+    margin-bottom: 8px;
+
+}
+
+
+.header p {
+
     color: #6b7280;
-    font-size: 18px;
-    margin-bottom: 10px;
+    font-size: 17px;
+
+}
+
+
+hr {
+
+    border: none;
+    border-top: 1px solid #e5e7eb;
+    margin: 25px 0;
+
+}
+
+
+.kpi-container {
+
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+    margin-top: 25px;
+
+}
+
+
+.card {
+
+    background: white;
+    flex: 1;
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    text-align: center;
+
+}
+
+
+.card:hover {
+
+    transform: translateY(-3px);
+    transition: 0.2s;
+
+}
+
+
+.card h3 {
+
+    color: #64748b;
+    font-size: 16px;
+    margin-bottom: 12px;
+    font-weight: 600;
+
+}
+
+
+.card h2 {
+
+    color: #2563eb;
+    font-size: 36px;
+    margin: 0;
+    font-weight: 700;
+
+}
+
+
+.dash-graph {
+
+    background: white;
+    border-radius: 16px;
 
 }
 
 .card h2 {
 
     color: #2563eb;
-    font-size: 34px;
+    font-size: 36px;
     margin: 0;
+    font-weight: 700;
+
+}
+
+
+.dash-graph {
+
+    background: white;
+    border-radius: 16px;
 
 }
